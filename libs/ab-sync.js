@@ -49,6 +49,8 @@ var ABSync = {
         self._fns.push(fn);
         if (self._fns.length === 1)
             fn(new ABSync.Class(self));
+
+        return self;
     },
 
     _run: function()
