@@ -23,7 +23,7 @@ var ABSync = {
 
         if (self._fns.length > 0 ||
                 self._parent !== null) {
-            throw "ABSync stack not empty.";
+            throw new Error('ABSync stack not empty.');
             return false;
         }
 
@@ -34,11 +34,16 @@ var ABSync = {
     {
         var self = this.self;
 
+        if (self._parent === null && self._fns.length === 0)
+            throw new Error('ABSync finished for the second time.');
+
         self._fns.splice(0, 1);
         if (self._fns.length > 0)
             self._fns[0](new ABSync.Class(self));
-        else if (self._parent !== null)
+        else if (self._parent !== null) {
             self._parent.finished();
+            self._parent = null;
+        }
     },
 
     join: function(fn, id)
